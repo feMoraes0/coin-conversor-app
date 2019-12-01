@@ -19,8 +19,14 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.redAccent,
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text('Coin Conversor'),
+        backgroundColor: Colors.amber,
+        centerTitle: true,
+      ),
+      body: Container(),
     );
   }
 }
