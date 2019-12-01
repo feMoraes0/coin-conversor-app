@@ -12,6 +12,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         hintColor: Colors.amber,
         primaryColor: Colors.white,
+        inputDecorationTheme: InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white))
+        )
       ),
       home: Home(),
     );
