@@ -40,9 +40,21 @@ class _HomeState extends State<Home> {
   final euroController = TextEditingController();
   double dolar, euro;
 
-  void _realChanged(String text) {}
-  void _dolarChanged(String text) {}
-  void _euroChanged(String text) {}
+  void _realChanged(String text) {
+    double real = double.parse(text);
+    dolarController.text = (real/this.dolar).toStringAsFixed(2);
+    euroController.text = (real/this.euro).toStringAsFixed(2);
+  }
+  void _dolarChanged(String text) {
+    double dolar = double.parse(text);
+    realController.text = (dolar * this.dolar).toStringAsFixed(2);
+    euroController.text = ((dolar*this.dolar)/this.euro).toStringAsFixed(2);
+  }
+  void _euroChanged(String text) {
+    double euro = double.parse(text);
+    realController.text = (euro * this.euro).toStringAsFixed(2);
+    dolarController.text = ((euro*this.euro)/this.dolar).toStringAsFixed(2);
+  }
 
   @override
   Widget build(BuildContext context) {
