@@ -6,6 +6,24 @@ import 'dart:convert';
 
 const request = 'https://api.hgbrasil.com/finance?format=json&key=5987d27c';
 
+Widget buildTextField(String label, String prefix, TextEditingController controller, Function function) {
+  return TextField(
+    controller: controller,
+    onChanged: function,
+    keyboardType: TextInputType.number,
+    decoration: InputDecoration(
+      labelText: label,
+      labelStyle: TextStyle(color: Colors.amber),
+      border: OutlineInputBorder(),
+      prefixText: prefix,
+    ),
+    style: TextStyle(
+      color: Colors.amber,
+      fontSize: 25.0,
+    ),
+  );
+}
+
 Future<Map> getData() async {
   http.Response response = await http.get(request);
   return json.decode(response.body);
@@ -17,6 +35,15 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final realController = TextEditingController();
+  final dolarController = TextEditingController();
+  final euroController = TextEditingController();
+  double dolar, euro;
+
+  void _realChanged(String text) {}
+  void _dolarChanged(String text) {}
+  void _euroChanged(String text) {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +53,57 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.amber,
         centerTitle: true,
       ),
-      body: Container(),
+      body: FutureBuilder<Map>(
+        future: getData(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return Center(
+                child: Text(
+                  'Loading data...',
+                  style: TextStyle(
+                    color: Colors.amber,
+                    fontSize: 25.0,
+                  ),
+                ),
+              );
+            default:
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    'Load error...',
+                    style: TextStyle(
+                      color: Colors.amber,
+                      fontSize: 25.0,
+                    ),
+                  ),
+                );
+              } else {
+                dolar = snapshot.data['results']['currencies']['USD']['buy'];
+                euro = snapshot.data['results']['currencies']['EUR']['buy'];
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Icon(
+                        Icons.monetization_on,
+                        size: 150.0,
+                        color: Colors.amber,
+                      ),
+                      buildTextField('Reais', 'R\$ ', realController, _realChanged),
+                      Divider(),
+                      buildTextField('Dolars', 'US\$ ', dolarController, _dolarChanged),
+                      Divider(),
+                      buildTextField('Euros', '\€ ', euroController, _euroChanged),
+                    ],
+                  ),
+                );
+              }
+          }
+        },
+      ),
     );
   }
 }

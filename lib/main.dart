@@ -9,6 +9,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Coin Conversor',
+      theme: ThemeData(
+        hintColor: Colors.amber,
+        primaryColor: Colors.white,
+      ),
       home: Home(),
     );
   }
